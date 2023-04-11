@@ -1,35 +1,39 @@
 #!/usr/bin/python3
-
+"""This documents gather stats from stdin"""
 import sys
 
-status_codes = [200, 301, 400, 401, 403, 404, 405, 500]
-count_by_code = {code: 0 for code in status_codes}
-total_size = 0
-line_count = 0
 
-try:
-    for line in sys.stdin:
-        try:
-            # Extract file size and status code from line
-            fields = line.split()
-            size = int(fields[-1])
-            code = int(fields[-2])
-            if code in count_by_code:
-                count_by_code[code] += 1
-            total_size += size
-            line_count += 1
-        except (IndexError, ValueError):
-            # Ignore lines that don't match the input format
-            pass
+def print_pretty(size, code_dict):
+    """parse important data"""
+    print("File size: {}".format(size))
+    for key, value in sorted(code_dict.items()):
+        if (value != 0):
+            print("{}: {}".format(key, value))
 
-        # Print metrics every 10 lines
-        if line_count % 10 == 0:
-            print(f"Total file size: {total_size}")
-            for code in sorted(count_by_code):
-                print(f"{code}: {count_by_code[code]}")
-
-except KeyboardInterrupt:
-    # Handle keyboard interrupt (Ctrl+C) by printing final metrics
-    print(f"Total file size: {total_size}")
-    for code in sorted(count_by_code):
-        print(f"{code}: {count_by_code[code]}")
+if __name__ == '__main__':
+    """init code to print the parsed data"""
+    size = 0
+    code_dict = {
+        "200": 0,
+        "301": 0,
+        "400": 0,
+        "401": 0,
+        "403": 0,
+        "404": 0,
+        "405": 0,
+        "500": 0
+    }
+    try:
+        line_counter = 0
+        for line in sys.stdin:
+            line_counter += 1
+            code = line.split()[7]
+            size += int(line.split()[8])
+            if code in code_dict:
+                code_dict[code] += 1
+            if (line_counter % 10 == 0):
+                print_pretty(size, code_dict)
+        print_pretty(size, code_dict)
+    except KeyboardInterrupt:
+        print_pretty(size, code_dict)
+        raise
