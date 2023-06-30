@@ -1,13 +1,17 @@
 #!/usr/bin/python3
-"""Fetches a URL."""
-import urllib.request as request
+"""initializate"""
+from urllib.request import urlopen
 
 
-if __name__ == "__main__":
-    with request.urlopen("https://intranet.hbtn.io/status") as response:
-        if response.readable():
-            data = response.read()
-            print("Body response:")
-            print("\t- type: {}".format(type(data)))
-            print("\t- content: {}".format(data))
-            print("\t- utf8 content: {}".format(data.decode("utf-8")))
+def hbtn_status_0():
+    """function show my status"""
+    with urlopen('https://intranet.hbtn.io/status') as response:
+        html = response.read()
+        utf8 = html.decode('utf-8')
+        print("Body response:\n\t- type: {}".format(type(html)))
+        print("\t- content: {}\n\t- utf8 content: {}".
+              format(html, utf8, end=""))
+
+
+if __name__ == '__main__':
+    hbtn_status_0()
