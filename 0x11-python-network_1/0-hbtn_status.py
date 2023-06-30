@@ -1,17 +1,18 @@
 #!/usr/bin/python3
-"""initializate"""
-from urllib.request import urlopen
+""" Alx Status hbtn """
+import urllib.request
 
 
-def hbtn_status_0():
-    """function show my status"""
-    with urlopen('https://intranet.hbtn.io/status') as response:
+def myStatus():
+    """what's my status"""
+    request = urllib.request.Request("https://alx-intranet.hbtn.io/status")
+    with urllib.request.urlopen(request) as response:
         html = response.read()
-        utf8 = html.decode('utf-8')
-        print("Body response:\n\t- type: {}".format(type(html)))
-        print("\t- content: {}\n\t- utf8 content: {}".
-              format(html, utf8, end=""))
+        print("Body response:")
+        print("\t- type: {}".format(type(html)))
+        print("\t- content: {}".format(html))
+        print("\t- utf8 content: {}".format(html.decode('utf-8')))
 
 
-if __name__ == '__main__':
-    hbtn_status_0()
+if __name__ == "__main__":
+    myStatus()
